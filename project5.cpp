@@ -74,10 +74,20 @@ int main () {
     } 
 
     // Open the output file 
-    ofstream outputFile("output.txt"); 
+    ofstream outputFile("compressedOutput.txt"); 
     if (!outputFile.is_open()) { 
         cerr << "Error opening output file\n"; 
         return 1;
+    }
+
+    ofstream tokenFile("tokens.txt"); 
+    if (!outputFile.is_open()) { 
+        cerr << "Error opening output file\n"; 
+        return 1;
+    }
+
+    for (const auto &entry : wordIndex){
+        tokenFile << entry.first << '\n';
     }
 
     // Read the file again and print the corresponding index of each word 
