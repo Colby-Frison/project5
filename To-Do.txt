@@ -32,14 +32,12 @@ ________________________________________________________________________________
 
 (project5-decompress)
 
-[] Read encoded text file
-    [] Will probably encounter an error where new lines are not implemeneted properly
-    [] Porbably going to make \n its own token to make it more simple
-        - At the time of writing this words are spereated by new lines OR spaces, I havent gotten to this part
-          yet but my guess is when decompressing its not going to work as intended
+[X] Read encoded text file
+    [X] Will probably encounter an error where new lines are not implemeneted properly
 
 [] As the txt file is read translate indicies into their token
-    [] Either output this with cout or save it to a text file as done before
+    - its decoding it but not correctly at the moment
+    [X] Either output this with cout or save it to a text file as done before
         - otuput not specified yet, so actual instructions are unclear
 
 [] Addition checker to simply compare new text file to original one
@@ -59,3 +57,7 @@ lon
    legend of tokens into the txt file efficiently. 
  - I should be able to finsih that by later today, but without the input or output files I dont really know If im doing anyhting 
    correct. 
+
+3:27 pm
+ - I think compression works, I started decompression, and it print out a statment based on the tokens, but its completley wrong.
+ - I'll try to fix it later today if I have time, but at the moment it still needs some work
