@@ -10,48 +10,101 @@ using namespace std;
 
 int main () {
 
+    //open file and ensure it actually opened
     ifstream file("tempFile.txt");
     if (!file.is_open()) {
         cerr << "Error opening file\n";
         return 1;
     }
 
+    // initialize unordered map token:frequency
     unordered_map<string, int> wordFrequency;
+    // initialize string to temp hold token
     string word;
 
+
+    /***  File is read and the next word is inserted into the map, if it doesnt exist it makes it automatically
+    and adds to it. If it already exists it simply adds one to the frequency. The while loop works because it 
+    throws a true if the file is properly read and false if there is nothign read. ***/
     while (file >> word) {
         wordFrequency[word]++;
     }
 
+    // after finsihed reading file is closed
     file.close();
 
+    // the entire unorderedMap is then printed as token:frequency
     for (const auto &entry : wordFrequency) {
         cout << entry.first << " : " << entry.second << '\n';
     }
 
-    // Move contents to a vector of pairs
-    vector<pair<string, int>> wordFreqVec(wordFrequency.begin(), wordFrequency.end());
-    // Sort the vector in descending order by frequency 
-    // Sorts via a lambda funciton thats a little complicated and significantly reduces readability so probably try to make it a little simpler
-    sort(wordFreqVec.begin(), wordFreqVec.end(), [](const pair<string, int> &a, const pair<string, int> &b) { return b.second < a.second; });
 
 
-    //sort the myTokens in the decreasing order of VALUE which is frequencies
+    // Move contents to a map where the key is the word and the value is the frequency 
+    map<string, int> sortedMap(wordFrequency.begin(), wordFrequency.end()); 
 
-    for (const auto &entry : wordFrequency) {
-        cout << entry.first << ' ';
+    // Use a multimap to sort by frequency 
+    // swap key and value so it can be sorted by frequency
+    multimap<int, string, greater<int>> frequencySortedMap; 
+    
+    //insert everything from the map into the multimap, which is sorted by greater<int>
+    for (const auto &entry : sortedMap) { 
+        frequencySortedMap.insert({entry.second, entry.first}); 
+    }
+
+    // print the tokens from the multimap seperated by a space
+    // this is in decreasing order of frequency
+    for (const auto &entry : frequencySortedMap) {
+        cout << entry.second << ' ';
     }
 
     cout << endl;
     cout << "********" << endl;
 
+    // Reopen the file to find the index of each word and print it 
+    file.open("tempFile.txt"); 
+    if (!file.is_open()) { 
+        cerr << "Error reopening file\n"; return 1; 
+    } 
 
-    //Now open the filename.text file again for reading
-    //Read token by token as you have done this before
+    // Create a map to assign each word an index 
+    map<string, int> wordIndex; int index = 0; 
+    for (const auto &entry : frequencySortedMap) { 
+        wordIndex[entry.second] = index++; 
+    } 
 
-    //each time you get a token, find its position in the myTokens (sorted
-    //data structure and print the position followed by space
+    // Open the output file 
+    ofstream outputFile("output.txt"); 
+    if (!outputFile.is_open()) { 
+        cerr << "Error opening output file\n"; 
+        return 1;
+    }
 
+    // Read the file again and print the corresponding index of each word 
+    char ch; 
+    string currentWord; 
+    while (file.get(ch)) { 
+        if (isspace(ch)) { 
+            if (!currentWord.empty()) { 
+                cout << wordIndex[currentWord] << " "; 
+                outputFile << wordIndex[currentWord] << " "; 
+                currentWord.clear(); 
+            } 
+            if (ch == '\n') { 
+                cout << '\n'; 
+                outputFile << '\n'; 
+            } 
+        } else { 
+            currentWord += ch; 
+        } 
+    } 
+    if (!currentWord.empty()) { // handle the last word if there is no trailing space
+        cout << wordIndex[currentWord] << " "; 
+        outputFile << wordIndex[currentWord] << " "; 
+    } 
+    
+    file.close(); 
+    outputFile.close();
 
     cout << endl;
 
