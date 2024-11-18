@@ -10,20 +10,17 @@ using namespace std;
 
 int main () {
 
-    ifstream file("input.txt");
+    ifstream file("tempFile.txt");
     if (!file.is_open()) {
         cerr << "Error opening file\n";
         return 1;
     }
 
     unordered_map<string, int> wordFrequency;
-    string line, word;
+    string word;
 
-    while (getline(file, line)) {
-        stringstream ss(line);
-        while (ss >> word) {
-            wordFrequency[word]++;
-        }
+    while (file >> word) {
+        wordFrequency[word]++;
     }
 
     file.close();
@@ -31,6 +28,7 @@ int main () {
     for (const auto &entry : wordFrequency) {
         cout << entry.first << " : " << entry.second << '\n';
     }
+
 
     //read the name of the file ./a.out < filename.txt
 
@@ -42,7 +40,7 @@ int main () {
 
     //sort the myTokens in the decreasing order of VALUE which is frequencies
 
-    //print the KEYS in myTokens (which has been sorted)sep arated by a space.
+    //print the KEYS in myTokens (which has been sorted)separated by a space.
     //after you printed the KEYS Do this
     cout << endl;
     cout << "********" << endl;
