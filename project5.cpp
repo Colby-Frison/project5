@@ -29,19 +29,19 @@ int main () {
         cout << entry.first << " : " << entry.second << '\n';
     }
 
-
-    //read the name of the file ./a.out < filename.txt
-
-    //get each token and store them in the unordered_map (or map) increment
-    //its frequencies. You MAY be able to do myTokens[aToken]++. Work on this.
-
-    //close the file (filename.txt)
+    // Move contents to a vector of pairs
+    vector<pair<string, int>> wordFreqVec(wordFrequency.begin(), wordFrequency.end());
+    // Sort the vector in descending order by frequency 
+    // Sorts via a lambda funciton thats a little complicated and significantly reduces readability so probably try to make it a little simpler
+    sort(wordFreqVec.begin(), wordFreqVec.end(), [](const pair<string, int> &a, const pair<string, int> &b) { return b.second < a.second; });
 
 
     //sort the myTokens in the decreasing order of VALUE which is frequencies
 
-    //print the KEYS in myTokens (which has been sorted)separated by a space.
-    //after you printed the KEYS Do this
+    for (const auto &entry : wordFrequency) {
+        cout << entry.first << ' ';
+    }
+
     cout << endl;
     cout << "********" << endl;
 
