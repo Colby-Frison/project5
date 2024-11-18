@@ -1,0 +1,51 @@
+X is check mark
+
+first hald of main file (project5)
+
+[] create section to read the file
+    [] read file 
+    [] close file
+
+[] store words in onordered map
+    [] store words in tokens seperated by ' ' 
+    [] store frequencies in map
+    [] find some way to make sure everything is acually being stored including punctuation
+    [] see if having numbers in the text file causes any errors
+
+[] Sort unorderedmap by frequencies
+    [] Choose algorithm to do the sorting
+    [] Sort in decreasing order
+
+second hald of main file (project5)
+
+[] compress the file
+    [] re-open the file
+    [] read file and print index of the token in the map seperated by a space
+
+[] save encoded data to a txt file
+    [] save list of indicies to a text file
+    [] The legend also needs to be output somhow to decoder can access it
+__________________________________________________________________________________________________________________________________________________
+
+(project5-decompress)
+
+[] Read encoded text file
+    [] Will probably encounter an error where new lines are not implemeneted properly
+    [] Porbably going to make \n its own token to make it more simple
+        - At the time of writing this words are spereated by new lines OR spaces, I havent gotten to this part
+          yet but my guess is when decompressing its not going to work as intended
+
+[] As the txt file is read translate indicies into their token
+    [] Either output this with cout or save it to a text file as done before
+        - otuput not specified yet, so actual instructions are unclear
+
+[] Addition checker to simply compare new text file to original one
+
+
+lon
+
+11/18/2024 9:31 am 
+ - Just started the program and made to-do list. I tired to account for edge cases, but this project is pretty simple os there isn't 
+   a whole lot to worry about
+ - With that this is probably the simplest project so far. Its litteraly just reading a file to a  map with words:frequency. I like
+   just started and im already almost done. I'll try to finish this in the break later, but we'll see.
