@@ -5,6 +5,7 @@
         "unordered_map": "cpp",
         "fstream": "cpp",
         "xstring": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "iostream": "cpp"
     }
 }
