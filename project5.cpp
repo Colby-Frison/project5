@@ -38,6 +38,7 @@ int main () {
         cout << entry.first << " : " << entry.second << '\n';
     }
 
+    cout << ":::::::::::::::::::::::::" << endl;
 
 
     // Move contents to a map where the key is the word and the value is the frequency 
@@ -52,11 +53,20 @@ int main () {
         frequencySortedMap.insert({entry.second, entry.first}); 
     }
 
+    // the entire list is then printed as token:frequency
+    for (const auto &entry : frequencySortedMap) {
+        cout << entry.second << " : " << entry.first << '\n';
+    }
+
+    /*
+
     // print the tokens from the multimap seperated by a space
     // this is in decreasing order of frequency
     for (const auto &entry : frequencySortedMap) {
         cout << entry.second << ' ';
     }
+
+    */
 
     cout << endl;
     cout << "********" << endl;
@@ -68,9 +78,11 @@ int main () {
     } 
 
     // Create a map to assign each word an index 
-    map<string, int> wordIndex; int index = 0; 
+    map<string, int> wordIndex; 
+    int index = 1; 
     for (const auto &entry : frequencySortedMap) { 
-        wordIndex[entry.second] = index++; 
+        wordIndex[entry.second] = index; 
+        index++;
     } 
 
     // Open the output file 
@@ -86,9 +98,27 @@ int main () {
         return 1;
     }
 
-    for (const auto &entry : wordIndex){
-        tokenFile << entry.first << '\n';
+    for (const auto &entry : frequencySortedMap){
+        tokenFile << entry.second << '\n';
     }
+
+    string line;
+    while (getline(file, line, '\n')) {
+        string word;
+        for(char& ch : line) {
+            if(isspace(ch)) {
+                cout << wordIndex[word] << " ";
+                outputFile << wordIndex[word] << " ";
+                word.clear();
+            } else {
+                word += ch;
+            }
+        }
+        cout << endl;
+        outputFile << '\n';
+    }
+
+    /*
 
     // Read the file again and print the corresponding index of each word 
     char ch; 
@@ -112,6 +142,8 @@ int main () {
         cout << wordIndex[currentWord] << " "; 
         outputFile << wordIndex[currentWord] << " "; 
     } 
+
+    */
     
     file.close(); 
     outputFile.close();
