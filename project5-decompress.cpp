@@ -21,11 +21,16 @@ int main () {
     }
 
     string token;
-    int index = 0;
+    int index = 1;
 
     while (getline(tokenFile, token)){
         tokens[index++] = token;
     }
+
+    for (const auto &entry : tokens) {
+        cout << entry.second << " : " << entry.first << '\n';
+    }
+
     tokenFile.close();
     
     //open file and ensure it actually opened
@@ -44,6 +49,24 @@ int main () {
 
     string line;
 
+
+    while (getline(compressedFile, line, '\n')) {
+        string index;
+        for(char& ch : line) {
+            if(isspace(ch)) {
+                int idx = stoi(index);
+                cout << tokens[idx] << " ";
+                outputFile << tokens[idx] << " ";
+                index.clear();
+            } else {
+                index += ch;
+            }
+        }
+        cout << endl;
+        outputFile << '\n';
+    }
+
+    /*
 
     char ch;
     string currentNumber;
@@ -72,6 +95,8 @@ int main () {
         int idx = stoi(currentNumber); 
         outputFile << tokens[idx] << " "; 
     } 
+
+    */
     
     compressedFile.close(); 
     outputFile.close();
