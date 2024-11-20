@@ -8,5 +8,10 @@
         "string": "cpp",
         "iostream": "cpp",
         "ostream": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "complainin",
+        "cout",
+        "multimap"
+    ]
 }
