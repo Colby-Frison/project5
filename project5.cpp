@@ -114,6 +114,9 @@ int main () {
                 word += ch;
             }
         }
+        cout << wordIndex[word] << " ";
+        outputFile << wordIndex[word] << " ";
+        
         cout << endl;
         outputFile << '\n';
     }
