@@ -6,6 +6,7 @@
         "fstream": "cpp",
         "xstring": "cpp",
         "string": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     }
 }
