@@ -9,40 +9,61 @@
 using namespace std;
 
 
-/*
-Colby Frison
-CS 2413 ~ Data structures
-Project 5 - Compression
+/***************************************************************************************************************************************************
+***************************************************************** Colby Frison *********************************************************************
+*********************************************************** CS 2413 ~ Data structures **************************************************************
+************************************************************ Project 5 - Compression ***************************************************************
+****************************************************************************************************************************************************
 
 Overall a pretty simple program, simply read a file, create a token based on the word read along with increasing the frequency of 
 the token as it appears. Then this map is sorted in decreasing ordedr for faster acess. Finally the text file is read again and the 
 words in the text file are assigned to an index of the token list hence encoding the text file. 
 
-This type of encoding is not very efficient when working with a file that does not posses much repetition as it relies on the repetition
-of words to decrease the file size. In all of the text files provided they do not contain much if any repetition so the compression and 
-decompression actaully makes it less space efficient. To remedy this a different form of compression could be used
-*/
+It should be just that simple, but since the gradescope only inputs the file once via redirected input, it not only doesnt do what 
+the instructions, but since its only inputed once the string must be stored for the second read.
+
+To handle this the each line is simply fed into the content string then it can be reread later in the file. It also says to read the 
+file line by line, but the file is all in one line, so it kind of makes that obsolete.
+
+In general though the program works by taking each character of the string and reconstructing words, if the charcter is a space, it knows
+the words is over, so it does its operations, clears the word and moves on.
+
+Also the sorting of the list is done through a mutlimap with a greater parameter. Its kinda convoluted how this is organized, as it goes from
+unordered map to map to multimap back to a map.
+
+Lastly the second time reading through the "file" it uses a slighly different for and while loop along with a few extra if statements
+since it has to handle a normal string instead of just being able to use the input methods.
+
+****************************************************************************************************************************************************
+
+Part 2 :
+
+Part 3 :
+
+***************************************************************************************************************************************************/
 int main () {
     string fileContent; // To store the entire file as a string
-    string line;
+    string line; // to store each line
 
     // initialize unordered map token:frequency
     unordered_map<string, int> wordFrequency;
 
     // initialize string to temp hold token
     while (getline(cin, line, '\n')) {
-        if(line == "STOP") break;
-        string word;
-        for(char& ch : line) {
-            if(isspace(ch)) {
-                wordFrequency[word]++;
-                word.clear();
+        if(line == "STOP") break; // checker to stop input sequence because I dont use redirected input
+
+        string word; // stores word being built
+
+        for(char& ch : line) {// loop through line
+            if(isspace(ch)) { // if character is ' '
+                wordFrequency[word]++; // auto initialize token if it doesn't exist then add frequency regardless
+                word.clear(); // clear word
             } else {
-                word += ch;
+                word += ch; // build word
             }
         }
-        wordFrequency[word]++;
-        fileContent = fileContent + line;
+        wordFrequency[word]++; // sicne it doesnt end in a space it doesn't account for the last word
+        fileContent = fileContent + line; // add to full content for later
     }
 
     // Move contents to a map where the key is the word and the value is the frequency 
@@ -57,6 +78,8 @@ int main () {
         frequencySortedMap.insert({entry.second, entry.first}); 
     }
 
+    // print out all tokens
+    //print second entry since its organized frequency:token for sorting purposes
     for (const auto &entry : frequencySortedMap){
         cout << entry.second << ' ';
     }
@@ -69,10 +92,11 @@ int main () {
         index++;
     }
 
-
+    // print divider
     cout << endl;
     cout << "**********" << endl;
 
+    // create indexes
     size_t start = 0;
     size_t end;
 
