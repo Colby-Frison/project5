@@ -15,7 +15,8 @@
         "vector": "cpp",
         "xhash": "cpp",
         "xiosbase": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "map": "cpp"
     },
     "cSpell.words": [
         "complainin",
