@@ -40,18 +40,26 @@ int main () {
         return 1;
     }
 
-    //open file and ensure it actually opened
-    ofstream outputFile("decompressed.txt");
-    if (!compressedFile.is_open()) {
+
+    
+
+    ofstream outputFile("decompressed.txt", ios::trunc); // Open the file in truncation mode
+    
+    if (!outputFile.is_open()) {
         cerr << "Error opening file\n";
         return 1;
     }
 
-    string line;
+    outputFile.seekp(0, ios::end);
 
+    string line;
 
     while (getline(compressedFile, line, '\n')) {
         string index;
+        if (outputFile.tellp() != 0) {
+            cout << endl;
+            outputFile << '\n';
+        }
         for(char& ch : line) {
             if(isspace(ch)) {
                 int idx = stoi(index);
@@ -62,8 +70,6 @@ int main () {
                 index += ch;
             }
         }
-        cout << endl;
-        outputFile << '\n';
     }
 
     /*

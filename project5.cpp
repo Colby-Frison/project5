@@ -8,6 +8,20 @@
 
 using namespace std;
 
+
+/*
+Colby Frison
+CS 2413 ~ Data structures
+Project 5 - Compression
+
+Overall a pretty simple program, simply read a file, create a token based on the word read along with increasing the frequency of 
+the token as it appears. Then this map is sorted in decreasing ordedr for faster acess. Finally the text file is read again and the 
+words in the text file are assigned to an index of the token list hence encoding the text file. 
+
+This type of encoding is not very efficient when working with a file that does not posses much repetition as it relies on the repetition
+of words to decrease the file size. In all of the text files provided they do not contain much if any repetition so the compression and 
+decompression actaully makes it less space efficient. To remedy this a different form of compression could be used
+*/
 int main () {
 
     //open file and ensure it actually opened
@@ -19,6 +33,7 @@ int main () {
 
     // initialize unordered map token:frequency
     unordered_map<string, int> wordFrequency;
+
     // initialize string to temp hold token
     string word;
 
@@ -33,14 +48,6 @@ int main () {
     // after finsihed reading file is closed
     file.close();
 
-    // the entire unorderedMap is then printed as token:frequency
-    for (const auto &entry : wordFrequency) {
-        cout << entry.first << " : " << entry.second << '\n';
-    }
-
-    cout << ":::::::::::::::::::::::::" << endl;
-
-
     // Move contents to a map where the key is the word and the value is the frequency 
     map<string, int> sortedMap(wordFrequency.begin(), wordFrequency.end()); 
 
@@ -53,23 +60,13 @@ int main () {
         frequencySortedMap.insert({entry.second, entry.first}); 
     }
 
-    // the entire list is then printed as token:frequency
-    for (const auto &entry : frequencySortedMap) {
-        cout << entry.second << " : " << entry.first << '\n';
+    // Open the output file 
+    ofstream outputFile("compressedOutput.txt"); 
+    if (!outputFile.is_open()) { 
+        cerr << "Error opening output file\n"; 
+        return 1;
     }
 
-    /*
-
-    // print the tokens from the multimap seperated by a space
-    // this is in decreasing order of frequency
-    for (const auto &entry : frequencySortedMap) {
-        cout << entry.second << ' ';
-    }
-
-    */
-
-    cout << endl;
-    cout << "********" << endl;
 
     // Reopen the file to find the index of each word and print it 
     file.open("tempFile.txt"); 
@@ -85,13 +82,6 @@ int main () {
         index++;
     } 
 
-    // Open the output file 
-    ofstream outputFile("compressedOutput.txt"); 
-    if (!outputFile.is_open()) { 
-        cerr << "Error opening output file\n"; 
-        return 1;
-    }
-
     ofstream tokenFile("tokens.txt"); 
     if (!outputFile.is_open()) { 
         cerr << "Error opening output file\n"; 
@@ -101,6 +91,16 @@ int main () {
     for (const auto &entry : frequencySortedMap){
         tokenFile << entry.second << '\n';
     }
+
+    for (const auto &entry : wordIndex){
+        cout << entry.first << ' ';
+        outputFile << entry.first << ' ';
+    }
+
+    cout << endl;
+    outputFile << endl;
+    cout << "**********" << endl;
+    outputFile << "**********" << endl;
 
     string line;
     while (getline(file, line, '\n')) {
@@ -117,36 +117,11 @@ int main () {
         cout << wordIndex[word] << " ";
         outputFile << wordIndex[word] << " ";
         
+        /*
         cout << endl;
         outputFile << '\n';
+        */
     }
-
-    /*
-
-    // Read the file again and print the corresponding index of each word 
-    char ch; 
-    string currentWord; 
-    while (file.get(ch)) { 
-        if (isspace(ch)) { 
-            if (!currentWord.empty()) { 
-                cout << wordIndex[currentWord] << " "; 
-                outputFile << wordIndex[currentWord] << " "; 
-                currentWord.clear(); 
-            } 
-            if (ch == '\n') { 
-                cout << '\n'; 
-                outputFile << '\n'; 
-            } 
-        } else { 
-            currentWord += ch; 
-        } 
-    } 
-    if (!currentWord.empty()) { // handle the last word if there is no trailing space
-        cout << wordIndex[currentWord] << " "; 
-        outputFile << wordIndex[currentWord] << " "; 
-    } 
-
-    */
     
     file.close(); 
     outputFile.close();
