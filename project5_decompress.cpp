@@ -8,40 +8,66 @@
 
 using namespace std;
 
+/***************************************************************************************************************************************************
+***************************************************************** Colby Frison *********************************************************************
+*********************************************************** CS 2413 ~ Data structures **************************************************************
+*********************************************************** Project 5 - Decompression **************************************************************
+****************************************************************************************************************************************************
+
+
+Part 2 :
+
+Part 3 :
+***************************************************************************************************************************************************/
+
 int main () {
+    string line;
 
 
-    map<int, string> tokens;
+    map<string, int> tokensTemp;
 
     string token;
     int index = 1;
+
+
+    getline(cin, line);
+
+    string word;
+    for(char& ch : line) {
+        if(isspace(ch)) {
+            tokensTemp[word] = index;
+            index++;
+
+            word.clear();
+        } else {
+            word += ch;
+        }
+    }
+
+    getline(cin, line);
+
+    map<int, string> tokens;
+    for (const auto &entry : tokensTemp) { 
+        tokens.insert({entry.second, entry.first}); 
+    }
+
+    line.clear();
+
+    int idx = -1;
+
     
-    cin >> token;
-
-    while (token != "**********"){
-        tokens[index++] = token;
-        cin >> token;
-    }
-
-    while (getline(cin, token)) {
-        tokens[index++] = token;
-    }
-
-
-    string line;
-
-    while (getline(cin, line, '\n')) {
+    while (getline(cin, line)) {
         string index;
         for(char& ch : line) {
             if(isspace(ch)) {
-                int idx = stoi(index);
+                idx = stoi(index);
                 cout << tokens[idx] << " ";
                 index.clear();
             } else {
                 index += ch;
             }
         }
-        cout << endl;
+        cout << tokens[stoi(index)];
     }
 
 
