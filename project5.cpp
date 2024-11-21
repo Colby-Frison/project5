@@ -23,9 +23,13 @@ of words to decrease the file size. In all of the text files provided they do no
 decompression actaully makes it less space efficient. To remedy this a different form of compression could be used
 */
 int main () {
+    string fileName;
+
+    cin >> fileName;
+    
 
     //open file and ensure it actually opened
-    ifstream file("tempFile.txt");
+    ifstream file("tests/input3.txt");
     if (!file.is_open()) {
         cerr << "Error opening file\n";
         return 1;
@@ -60,16 +64,8 @@ int main () {
         frequencySortedMap.insert({entry.second, entry.first}); 
     }
 
-    // Open the output file 
-    ofstream outputFile("compressedOutput.txt"); 
-    if (!outputFile.is_open()) { 
-        cerr << "Error opening output file\n"; 
-        return 1;
-    }
-
-
     // Reopen the file to find the index of each word and print it 
-    file.open("tempFile.txt"); 
+    file.open("tests/input3.txt"); 
     if (!file.is_open()) { 
         cerr << "Error reopening file\n"; return 1; 
     } 
@@ -82,25 +78,12 @@ int main () {
         index++;
     } 
 
-    ofstream tokenFile("tokens.txt"); 
-    if (!outputFile.is_open()) { 
-        cerr << "Error opening output file\n"; 
-        return 1;
-    }
-
     for (const auto &entry : frequencySortedMap){
-        tokenFile << entry.second << '\n';
-    }
-
-    for (const auto &entry : wordIndex){
-        cout << entry.first << ' ';
-        outputFile << entry.first << ' ';
+        cout << entry.second << ' ';
     }
 
     cout << endl;
-    outputFile << endl;
     cout << "**********" << endl;
-    outputFile << "**********" << endl;
 
     string line;
     while (getline(file, line, '\n')) {
@@ -108,15 +91,12 @@ int main () {
         for(char& ch : line) {
             if(isspace(ch)) {
                 cout << wordIndex[word] << " ";
-                outputFile << wordIndex[word] << " ";
                 word.clear();
             } else {
                 word += ch;
             }
         }
-        cout << wordIndex[word] << " ";
-        outputFile << wordIndex[word] << " ";
-        
+        cout << wordIndex[word] << " ";        
         /*
         cout << endl;
         outputFile << '\n';
@@ -124,7 +104,6 @@ int main () {
     }
     
     file.close(); 
-    outputFile.close();
 
     cout << endl;
 
