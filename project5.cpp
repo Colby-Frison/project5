@@ -57,29 +57,37 @@ int main () {
         frequencySortedMap.insert({entry.second, entry.first}); 
     }
 
+    for (const auto &entry : frequencySortedMap){
+        cout << entry.second << ' ';
+    }
+
     // Create a map to assign each word an index 
     map<string, int> wordIndex; 
     int index = 1; 
     for (const auto &entry : frequencySortedMap) { 
         wordIndex[entry.second] = index; 
         index++;
-    } 
-
-    for (const auto &entry : wordIndex){
-        cout << entry.first << ' ';
     }
+
 
     cout << endl;
     cout << "**********" << endl;
 
-    // Second read: manually split `fileContent` into lines
     size_t start = 0;
     size_t end;
-    while ((end = fileContent.find('\n', start)) != string::npos) {
-        line = fileContent.substr(start, end - start); // Extract a line
-        start = end + 1; // Move to the start of the next line
 
-        // Process the line
+    // Process lines until the end of string
+    while (start < fileContent.length()) {
+        end = fileContent.find('\n', start);
+        
+        // If no newline found, process until end of string
+        if (end == string::npos) {
+            end = fileContent.length();
+        }
+        
+        line = fileContent.substr(start, end - start); // Extract a line
+        
+        // Process the line word by word
         string word;
         for (char& ch : line) {
             if (isspace(ch)) {
@@ -90,7 +98,11 @@ int main () {
             }
         }
         cout << wordIndex[word] << " ";
+        
+        start = end + 1; // Move to the start of the next line
     }
+
+    cout << endl;
 
     return 0;
 }
