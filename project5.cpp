@@ -89,15 +89,26 @@ int main () {
         
         // Process the line word by word
         string word;
-        for (char& ch : line) {
+        bool isFirstWord = true;
+
+        for (size_t i = 0; i < line.length(); i++) {
+            char ch = line[i];
+            
             if (isspace(ch)) {
-                cout << wordIndex[word] << " ";
-                word.clear();
+                if (!word.empty()) {
+                    cout << wordIndex[word] << " ";
+                    word.clear();
+                }
             } else {
                 word += ch;
+                
+                // If we're at the last character of the line
+                if (i == line.length() - 1) {
+                    cout << wordIndex[word] << " ";
+                    word.clear();
+                }
             }
         }
-        cout << wordIndex[word] << " ";
         
         start = end + 1; // Move to the start of the next line
     }
