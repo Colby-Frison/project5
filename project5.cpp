@@ -23,34 +23,27 @@ of words to decrease the file size. In all of the text files provided they do no
 decompression actaully makes it less space efficient. To remedy this a different form of compression could be used
 */
 int main () {
-    string fileName;
-
-    cin >> fileName;
-    
-
-    //open file and ensure it actually opened
-    ifstream file("tests/input3.txt");
-    if (!file.is_open()) {
-        cerr << "Error opening file\n";
-        return 1;
-    }
+    string fileContent; // To store the entire file as a string
+    string line;
 
     // initialize unordered map token:frequency
     unordered_map<string, int> wordFrequency;
 
     // initialize string to temp hold token
-    string word;
-
-
-    /***  File is read and the next word is inserted into the map, if it doesnt exist it makes it automatically
-    and adds to it. If it already exists it simply adds one to the frequency. The while loop works because it 
-    throws a true if the file is properly read and false if there is nothign read. ***/
-    while (file >> word) {
+    while (getline(cin, line, '\n')) {
+        if(line == "STOP") break;
+        string word;
+        for(char& ch : line) {
+            if(isspace(ch)) {
+                wordFrequency[word]++;
+                word.clear();
+            } else {
+                word += ch;
+            }
+        }
         wordFrequency[word]++;
+        fileContent = fileContent + line;
     }
-
-    // after finsihed reading file is closed
-    file.close();
 
     // Move contents to a map where the key is the word and the value is the frequency 
     map<string, int> sortedMap(wordFrequency.begin(), wordFrequency.end()); 
@@ -64,12 +57,6 @@ int main () {
         frequencySortedMap.insert({entry.second, entry.first}); 
     }
 
-    // Reopen the file to find the index of each word and print it 
-    file.open("tests/input3.txt"); 
-    if (!file.is_open()) { 
-        cerr << "Error reopening file\n"; return 1; 
-    } 
-
     // Create a map to assign each word an index 
     map<string, int> wordIndex; 
     int index = 1; 
@@ -78,34 +65,32 @@ int main () {
         index++;
     } 
 
-    for (const auto &entry : frequencySortedMap){
-        cout << entry.second << ' ';
+    for (const auto &entry : wordIndex){
+        cout << entry.first << ' ';
     }
 
     cout << endl;
     cout << "**********" << endl;
 
-    string line;
-    while (getline(file, line, '\n')) {
+    // Second read: manually split `fileContent` into lines
+    size_t start = 0;
+    size_t end;
+    while ((end = fileContent.find('\n', start)) != string::npos) {
+        line = fileContent.substr(start, end - start); // Extract a line
+        start = end + 1; // Move to the start of the next line
+
+        // Process the line
         string word;
-        for(char& ch : line) {
-            if(isspace(ch)) {
+        for (char& ch : line) {
+            if (isspace(ch)) {
                 cout << wordIndex[word] << " ";
                 word.clear();
             } else {
                 word += ch;
             }
         }
-        cout << wordIndex[word] << " ";        
-        /*
-        cout << endl;
-        outputFile << '\n';
-        */
+        cout << wordIndex[word] << " ";
     }
-    
-    file.close(); 
-
-    cout << endl;
 
     return 0;
 }
