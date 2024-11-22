@@ -22,6 +22,7 @@ Part 3 :
 
 int main () {
     string line;
+    string output;
 
 
     map<string, int> tokensTemp;
@@ -57,18 +58,26 @@ int main () {
 
     
     while (getline(cin, line)) {
+
+        if(line == "STOP") break;
+
         string index;
+
         for(char& ch : line) {
             if(isspace(ch)) {
                 idx = stoi(index);
-                cout << tokens[idx] << " ";
+                output += tokens[idx];
+                output += ' ';
+
                 index.clear();
             } else {
                 index += ch;
             }
         }
-        cout << tokens[stoi(index)];
+        output += tokens[stoi(index)];
+        cout << output;
     }
+
 
 
     return 0;
