@@ -10,8 +10,8 @@ using namespace std;
 
 
 /***************************************************************************************************************************************************
-***************************************************************** Colby Frison *********************************************************************
-*********************************************************** CS 2413 ~ Data structures **************************************************************
+******************************************************************* Colby Frison *******************************************************************
+************************************************************* CS 2413 ~ Data structures ************************************************************
 ************************************************************ Project 5 - Compression ***************************************************************
 ****************************************************************************************************************************************************
 
@@ -36,9 +36,9 @@ since it has to handle a normal string instead of just being able to use the inp
 
 ****************************************************************************************************************************************************
 
-Part 2 :
+LLM Documentation :
 
-Part 3 :
+Debugging and Testing Plan :
 
 ***************************************************************************************************************************************************/
 int main () {
@@ -100,8 +100,11 @@ int main () {
     size_t start = 0;
     size_t end;
 
-    // Process lines until the end of string
+    // since it can only be read once I now had to use a string to read the file again
+
+    // Process line by line until the end of string
     while (start < fileContent.length()) {
+        // set end of line to 1st location of new line return
         end = fileContent.find('\n', start);
         
         // If no newline found, process until end of string
@@ -115,16 +118,19 @@ int main () {
         string word;
         bool isFirstWord = true;
 
+        // loop through line
         for (size_t i = 0; i < line.length(); i++) {
+            //get char from string
             char ch = line[i];
             
+            //if space & word built is not empty then output the index of the word built
             if (isspace(ch)) {
                 if (!word.empty()) {
                     cout << wordIndex[word] << " ";
                     word.clear();
                 }
             } else {
-                word += ch;
+                word += ch; // add char to word
                 
                 // If we're at the last character of the line
                 if (i == line.length() - 1) {
@@ -141,3 +147,63 @@ int main () {
 
     return 0;
 }
+
+
+/***************************************************************************************************************************************************
+***************************************************************** LLM Documentation ****************************************************************
+****************************************************************************************************************************************************
+
+In this project there was very limited usage of LLMs. This project as shown from the limited code is quite simple. The main issues I encountered was
+mainly due the the way files were inputed. At first I was under the assumption we would be reading a txt file, but then I swapped to a simple input
+and finaly redirected input. These changes in inputs caused a lot fo issues when trying to figure out how to orgnaize things like while loops, and 
+even simply how to take in each token/line. These were all different as I had to go from simply reading word by word to line by line to iterating
+through all characters and building the words from their character. So with that the only usage of AI I really had was how to deal with the inputs. 
+Unfortunatley Chat-gpt updated their website and the chat I used to discuss redirected input is no longer accessable in full. The main idea though
+is I asked what the syntax "./a.out < filename.txt" did and how do I read from it. Which it responded its just redirected input, and it can be read 
+using cin. I also asked if I'm using a while loop to read it, how does it know when to stop. Which it responded it automatically stops when the file 
+is finished being read. But thats pretty much it for LLM usage. I did do some research on maps and sorting maps elsewhere so I could actually figure 
+out how to use a map, and do so somewhat efficiently. I also did some research on compression efficency, only to find that this method is wildly 
+inefficient, and for this type of text it is not very efficient in compression, but thats unimportant.
+
+So in the end, I've provided the few prompts I've used above along with a rough response, the rational of said prompts were somewhat explained, (I 
+was trying to figure out how redirected input was working). Lastly, the third part is not very applicable since I only used the LLM to solve one 
+problem, and not a sequence of problems.
+
+****************************************************************************************************************************************************
+************************************************************ Debugging and Testing Plan  ***********************************************************
+****************************************************************************************************************************************************
+
+Specific Tests
+    There were a few tests I used to make sure the program was working properly. The first of which was simply comparing my output with the output 
+    provided in the project description. This was helpful when comapring final results, but not very helpful when searching for specific problems,
+    which is where the next technique came in. The next testing method was series of debug statments, due to the simplicity of this progrma there
+    wasn't a need for a lot of debugging, but I did use them to make sure stuff like tokens frequencies and indexes were all ebing assigned
+    correctly, I also used debug statements when testing with inputs to make sure the way I was reading ti was actually correct. The final way I 
+    debugged was by essetially using gradescope as a compiler. When all of my tests worked I went to gradescope to submit only to find ti said I 
+    was wrong, which was wierd because my tests said otherwise. So I then made itterations in my program and kept submitting to gradescope until
+    the desired result was achieved. This was very monotonous and not very useful since gradescope doesn't really give a usefull debug output, it
+    kind of does, but in all honesty it isn't all the helpful. But this method had to be done since there really isn't any other way to test the 
+    program the exact same way gradescope does without actually having acess to the testing program.
+
+Issues and Resolutions
+    One issue I remember encountering was when printing indexes I would be missing a value and a value would be 0 instead of the proper index, this 
+    took a very long time to figure out even though it should have been a quick fix. I initially though a token wasn't beign assigned properly so
+    I went through the process of checking that every token was accounted for and assigned a proper frequency, along with that I made sure that when
+    maps were being swapped, everything worked, or that everything was sorted properly. This came back with no errors so I moved on to the next 
+    potential trouble area which was reading through the 'file' a second time. This was a simple check by just printing out each line as it was 
+    parsed, this also had no issue. The last area to check was the word builder the second time. This is where the issue was, I found that when 
+    going through the last word there was no trailing space, so the final word was not outputed which was the aformentioned missing word, this word 
+    was not cleared so when going to the first word of the next line there extra character that obviously didn't have a token so it defaulted to 0.
+    To solve this issue I put in a small check that saw if the index of the current iteration is the last index of the string 'line', if it was the 
+    index of that word was printed out and the word was cleared. This resolved the issue, and although it was a very simple issue it unfortunately
+    took a little bit to find.
+
+Verification
+    This category seems to be more important for other projects than for this one since we are actually making the main method for this one. But 
+    regardless I gues thiss section pertains to being able to stick to the format of the project description and ensuring only the permitted 
+    libraries were utilized, but thats quite eacy to do. The only difference in my method compared to the main method is opening and closing the 
+    file, I'm not sure if this is actually needed, but since it differes from the project instructions I feel it is important to point out.
+    Other than that verfifiction of proper function of the program is described in the specific tests section.
+
+
+***************************************************************************************************************************************************/
