@@ -11,23 +11,39 @@ using namespace std;
 /*************************************************************************
  Colby Frison 
  CS 2413 ~ Data structures 
- Project 5 - Decompression 
+ Project 5 bonus - Decompression 
+
+The instructions of this project say to take the output from the base 
+project as the input for this part, but gradescope has it taking in the
+plain text as input, we are then supposed to compress it and decompress it
+in this code.
+
+Compression can be looked over in the base project, this is essentially 
+just a direct copy of what was done over there. The only difference is that
+instead of outputing it saves all data to an output string which is then 
+used by the decompression to work properly.
+
+The decompression section of this is pretty simple, there are three lines 
+to be read, the list of tokens, a dividing line, and the text represented 
+as indexes of the sorted token map. Each of these lines have their own 
+operation which is depicted in the code by operation 1 2 and 3.
 
 
-Current issue:
+Operation 1 creates the token map in token:index order
 
-So I've found out why grade scope doesn't submit right, they are passing 
-through the wrong input file. Instead of passing in the output from the base
-project they are passing in the input of the base project. I know this
-because when i simply output the input it passes all tests.
+Operation 2 is not really needed, but it swaps the map to index:token order
 
-At the moment I am simply outputing the input so I can pass the tests, but
-if the tests are fixed I can just actaully use the code
+operation 3 decompresses the line of indexes into words using the sorted 
+token map
 
+The specific detials of the logic is shown in the code
 
-Part 2 :
+There is also a convert algorithm used to convert strings to integers, this
+is used in operation 3 as an int is needed to access the map, and since 
+integers cannot be extracted from strings directly this is what I settled
+on. I tried using stoi() which worked in vscode, but for some reason this 
+didn't work in gradescope so I found an alternative.
 
-Part 3 :
 *************************************************************************/
 
 int convert(string s) 
@@ -47,6 +63,12 @@ int convert(string s)
 } 
 
 int main () {
+
+// -------------------------- Compression --------------------------------
+    // The compression part is pretty much just a copy of the original 
+    // base project, I just had to change how it was outputed so it could
+    // still be read by the decompress part
+
 
     string fileContent; // To store the entire file as a string
     string line; // to store each line
@@ -162,26 +184,34 @@ int main () {
 
 // ------------------------------ Decompress --------------------------------
 
-
+    // clear any data from line so it can be used safely
     line.clear();
 
-    string output2;
+    string output2; // intiaize new final output
 
-    map<string, int> tokensTemp;
-    map<int, string> tokens;
+    map<string, int> tokensTemp; // map for collecting tokens and assigning index
+    map<int, string> tokens; // map for fetching token from index
 
     // create indexes
     start = 0;
     size_t end2;
 
+    //temp variables
     string token;
     int indexI = 1;
 
+    // I had the code orgnaized one way, but then after realizing gradescope 
+    // inputs the og input I had to make some changes, so now there are a 
+    // series of if statments so It knows which operation to do for a given 
+    // line. Line 1 = collect tokens. Line 2 is just the *** line so it isn't
+    // really needed, but I'm using it to swap the map to the tokens one.
+    // then line 3 = decompressing the text with the token indexes.
+    // This could be optimized, but given the library and string constraints 
+    // its good enough
     int operation = 0;
 
 
     while (start < output.length()) {
-        //cout << "test0" << endl;
         // set end of line to 1st location of new line return
         end2 = output.find('\n', start);
         
@@ -196,57 +226,61 @@ int main () {
         string word;
         bool isFirstWord = true;
 
+        // 1st operation: Collect tokens
         if (operation == 0) {
-            string word;
-            for(char& ch : line) {
+            
+            //string word;
+            for(char& ch : line) { // loop through line ch by ch
+
+                // if the ch is a space then add token to map with val index
+                // then increment index ad clear data from word
                 if(isspace(ch)) {
                     tokensTemp[word] = indexI;
                     indexI++;
 
                     word.clear();
-                } else {
+                } else { // add ch to word
                     word += ch;
                 }
             }
-            //cout << "test1" << endl;
         }
 
+        // operation 2 : doesn't need to exist, but makes the code more readable (in my opinion)
+        // simple swaps the map from => token:index to index:token
         if (operation == 1) {
             for (const auto &entry : tokensTemp) { 
                 tokens.insert({entry.second, entry.first}); 
             }
-            //cout << "test2" << endl;
         }
 
+        // operation 3 : similar logic to opeartion 1, but instead of creating tokens
+        // it uses the token to decompress the line.
         if(operation == 2) {
-            int idx = -1;
 
+            int idx = -1; // initialize int index
         
-            string indexS;
+            string indexS; // string index
+            //this is needed as numbers are read as characters which are made to string
+            // this string can then be converted to int for token fetching from map
 
-            for(char& ch : line) {
+            for(char& ch : line) { // same for loop as operation 1
                 if(isspace(ch)) {
-                    idx = convert(indexS);
-                    output2 += tokens[idx];
-                    output2 += ' ';
+                    idx = convert(indexS); // convert string index to int
+                    output2 += tokens[idx]; // fetch token and add to output
+                    output2 += ' '; // add a space after each word
 
-                    indexS.clear();
+                    indexS.clear(); // clear string index
                 } else {
-                    indexS += ch;
+                    indexS += ch; // add to word
                 }
             }
+            // handle last word
             output2 += tokens[convert(indexS)];
-            cout << tokens[convert(indexS)];
-
-            //cout << "test3" << endl;
         }
         
         start = end2 + 1; // Move to the start of the next line
         operation++;
-        //cout << "test4" << endl;
     }
-
-    //cout << "test5" << endl;
 
     cout << output2;
 
