@@ -41,7 +41,7 @@ ________________________________________________________________________________
     [X] Either output this with cout or save it to a text file as done before
         - output not specified yet, so actual instructions are unclear
 
-[] Addition checker to simply compare new text file to original one
+[X] Addition checker to simply compare new text file to original one
 
 
 long
@@ -67,3 +67,14 @@ long
  - Everything is done, its very likely I'll have to change some stuff based on the desired input and output, but with my test cases
    compression AND decompression both work.
  - This project overall was pretty easy, mainly because we were permitted like 6 libraries, but I ain't complainin'.
+
+11/25/2024 10:12 am
+ - Everything works properly, I forgot to add to this through the dev process so there is a lot of missing details in the logs and on
+   the to-do list but I'm done os its chill. 
+ - In the project instructions it says to use the output of the base project as the input for the bonus section, but in gradescope it
+   pushes in the base input and expects the same line. This isn't nesssesarily a hard fix, but it just took a few minutes to migrate 
+   the og to the bonus and make everything work without any conflicting variables. I also had to get rid of the output from the base
+   since it isn't needed in the bonus.
+ - Everything works now and a part 2 and 3 isn't needed for the bonus section, so there really isn't much else to do, the only other 
+   thing I'm going to do is add some additional comments to the bonus section, so in case it is checked it doesnt look horrible. I'll 
+   also go in and make sure all the code and comments for the base project is good before I move on from it.  
